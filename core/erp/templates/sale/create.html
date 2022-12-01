@@ -1,0 +1,326 @@
+{% extends 'form.html' %}
+{% load static %}
+{% block head_form %}
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}">
+    <script src="{% static 'lib/tempusdominus-bootstrap-4.5.37.0/js/tempusdominus-bootstrap.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/tempusdominus-bootstrap-4.5.37.0/css/tempusdominus-bootstrap.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/bootstrap-touchspin-4.2.5/css/jquery.bootstrap-touchspin.css' %}"/>
+    <script src="{% static 'lib/bootstrap-touchspin-4.2.5/js/jquery.bootstrap-touchspin.js' %}"></script>
+    <script src="{% static 'sale/js/form.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <form class="form" method="post" enctype="multipart/form-data" id="frmSale" data-url="{{ list_url }}" autocomplete="off">
+        <div class="card {{ dashboard.card }}">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-plus"></i>
+                    {{ title }}
+                </h3>
+            </div>
+            <div class="card-body" style="display: block;">
+                <div class="container-fluid">
+                    <input type="hidden" name="action" id="action" value="{{ action }}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>{{ form.date_joined.label }}:</label>
+                                {{ form.date_joined }}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>{{ form.type.label }}:</label>
+                                {{ form.type }}
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>{{ form.client.label }}:</label>
+                                {{ form.client }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row content-employee">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>{{ form.employee.label }}:</label>
+                                {{ form.employee }}
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>{{ form.date_attention.label }}:</label>
+                                {{ form.date_attention }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>{{ form.subtotal.label }}</label>
+                                {{ form.subtotal }}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>{{ form.iva.label }}</label>
+                                {{ form.iva }}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>{{ form.total_iva.label }}</label>
+                                {{ form.total_iva }}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>{{ form.total.label }}</label>
+                                {{ form.total }}
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#home"><i class="fas fa-boxes"></i> Productos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#menu1"><i class="fas fa-people-carry"></i> Servicios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#menu2"><i class="fas fa-truck-loading"></i> Paquetes</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane container-fluid p-0 active" id="home">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group mt-3">
+                                        <label>Búsqueda de productos:</label>
+                                        <div class="input-group input-group-search">
+                                            <input type="text" class="form-control" autocomplete="off" name="input_search_products" placeholder="Ingrese el nombre de un producto">
+                                            <div class="input-group-append">
+                                                <button class="btn bg-navy dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-tasks"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer;">
+                                                    <a class="dropdown-item btnSearchProducts">
+                                                        <i class="fas fa-search"></i> Buscar productos
+                                                    </a>
+                                                    <a class="dropdown-item btnClearProducts">
+                                                        <i class="fas fa-times"></i> Limpiar búsqueda
+                                                    </a>
+                                                    <a class="dropdown-item btnRemoveAllProducts">
+                                                        <i class="fas fa-trash-alt"></i> Borrar todo
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <table style="width:100%;" class="table table-bordered table-sm" id="tblProducts">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 5%;">Eliminar</th>
+                                            <th style="width: 10%;">Código</th>
+                                            <th style="width: 30%;">Producto</th>
+                                            <th style="width: 10%;">Stock</th>
+                                            <th style="width: 20%;">Cantidad</th>
+                                            <th style="width: 15%;">P./Unitario</th>
+                                            <th style="width: 10%;">Subtotal</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane container-fluid p-0 fade" id="menu1">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group mt-3">
+                                        <label>Búsqueda de servicios:</label>
+                                        <div class="input-group input-group-search">
+                                            <input type="text" class="form-control" autocomplete="off" name="input_search_services" placeholder="Ingrese el nombre de un servicio">
+                                            <div class="input-group-append">
+                                                <button class="btn bg-navy dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-tasks"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right" style="cursor: pointer;">
+                                                    <a class="dropdown-item btnSearchServices">
+                                                        <i class="fas fa-search"></i> Buscar servicios
+                                                    </a>
+                                                    <a class="dropdown-item btnClearServices">
+                                                        <i class="fas fa-times"></i> Limpiar búsqueda
+                                                    </a>
+                                                    <a class="dropdown-item btnRemoveAllServices">
+                                                        <i class="fas fa-trash-alt"></i> Borrar todo
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <table style="width:100%;" class="table table-bordered table-sm" id="tblServices">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 5%;">Eliminar</th>
+                                            <th style="width: 10%;">Código</th>
+                                            <th style="width: 30%;">Servicio</th>
+                                            <th style="width: 15%;">Tipo</th>
+                                            <th style="width: 15%;">Cantidad</th>
+                                            <th style="width: 15%;">P./Unitario</th>
+                                            <th style="width: 10%;">Subtotal</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane container-fluid p-0 fade" id="menu2">
+                            <br>
+                            <button type="button" class="btn btn-success btn-sm btn-flat btnAddPackage">
+                                <i class="fas fa-folder-plus"></i> Agregar Paquete
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm btn-flat btnRemovePackages">
+                                <i class="fas fa-trash"></i> Borrar Paquetes
+                            </button>
+                            <br><br>
+                            <table style="width:100%;" class="table table-bordered table-sm" id="tblPackages">
+                                <thead>
+                                <tr>
+                                    <th style="width: 5%;">Eliminar</th>
+                                    <th style="width: 30%;">Descripción</th>
+                                    <th style="width: 25%;">Tarifa</th>
+                                    <th style="width: 10%;">Condición</th>
+                                    <th style="width: 10%;">Tamaño</th>
+                                    <th style="width: 10%;">Peso</th>
+                                    <th style="width: 10%;">Precio</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn bg-navy btn-flat">
+                    <i class="fas fa-save"></i> Guardar registro
+                </button>
+                <a href="{{ list_url }}" class="btn btn-danger btn-flat">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </div>
+    </form>
+    <div id="myModalSearchProducts" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <b><i class="fa fa-search"></i> Búsqueda de productos</b>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <table style="width:100%;" class="table table-bordered table-hover table-sm" id="tblSearchProducts">
+                            <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nombre</th>
+                                <th>P./Unitario</th>
+                                <th>Stock</th>
+                                <th>Agregar</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="myModalSearchServices" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <b><i class="fa fa-search"></i> Búsqueda de servicios</b>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <table style="width:100%;" class="table table-bordered table-hover table-sm" id="tblSearchServices">
+                            <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nombre</th>
+                                <th>Tipo</th>
+                                <th>P./Unitario</th>
+                                <th>Agregar</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="myModalPackage" class="modal fade" role="dialog">
+        <form method="post" id="frmPackage" data-id="0" autocomplete="off">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title font-weight-bold" id="title-package"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            {% for field in frmPackage.visible_fields %}
+                                <div class="form-group">
+                                    <label>{{ field.label }}:</label>
+                                    {{ field }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn bg-navy btn-flat btn-block">
+                            <i class="fas fa-save"></i> Guardar registro
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <script type="application/javascript">
+        sale.details.iva = parseFloat('{{ company.iva }}');
+        $(function () {
+            sale.listProducts();
+        });
+    </script>
+{% endblock %}

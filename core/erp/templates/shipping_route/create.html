@@ -1,0 +1,101 @@
+{% extends 'form.html' %}
+{% load static %}
+{% block head_form %}
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}">
+    <script src="{% static 'shipping_route/js/form.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <form class="form" method="post" action="." enctype="multipart/form-data" id="frmForm" data-url="{{ list_url }}" autocomplete="off">
+        <div class="card {{ dashboard.card }}">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-plus"></i>
+                    {{ title }} - {{ sale.number }}
+                </h3>
+            </div>
+            <div class="card-body" style="display: block;">
+                <div class="container-fluid">
+                    <input type="hidden" name="action" id="action" value="{{ action }}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>{{ form.date_joined.label }}:</label>
+                                {{ form.date_joined }}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>{{ form.status.label }}:</label>
+                                {{ form.status }}
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>{{ form.comment.label }}:</label>
+                                {{ form.comment }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#packages">
+                                <i class="fas fa-boxes"></i> Paquetes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#state">
+                                <i class="fas fa-people-carry"></i> Estados
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane container-fluid active" id="packages">
+                            <br>
+                            <table style="width:100%;" class="table table-bordered table-striped table-sm" id="tblPackages">
+                                <thead>
+                                <tr>
+                                    <th style="width: 25%;">Descripción</th>
+                                    <th style="width: 15%;">Tarifa</th>
+                                    <th style="width: 15%;">Condición</th>
+                                    <th style="width: 15%;">Tamaño</th>
+                                    <th style="width: 15%;">Peso</th>
+                                    <th style="width: 15%;">Subtotal</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane container-fluid fade" id="state">
+                            <br>
+                            <table style="width:100%;" class="table table-bordered table-striped table-sm" id="tblShippingRoute">
+                                <thead>
+                                <tr>
+                                    <th style="width: 20%;">Fecha de registro</th>
+                                    <th style="width: 15%;">Estado</th>
+                                    <th style="width: 65%;">Comentario</th>
+                                    <th style="width: 10%;">Eliminar</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn bg-navy btn-flat">
+                    <i class="fas fa-save"></i> Guardar registro
+                </button>
+                <a href="{{ list_url }}" class="btn btn-danger btn-flat">
+                    <i class="fas fa-times"></i> Cancelar
+                </a>
+            </div>
+        </div>
+    </form>
+{% endblock %}

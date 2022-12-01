@@ -1,0 +1,37 @@
+<!-- ======= Footer ======= -->
+<footer id="footer">
+
+    <div class="footer-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 footer-contact">
+                    <img alt="" src="{{ company.get_image }}" class="img-fluid d-block mx-auto">
+                    <h3>{{ company.name|upper }}</h3>
+                    <p>
+                        {{ company.description }}<br><br>
+                        <strong>Dirección:</strong> {{ company.address }}<br>
+                        <strong>Teléfono:</strong> {{ company.mobile }}<br>
+                        <strong>Email:</strong> {{ company.email }}<br>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container d-md-flex py-4">
+
+        <div class="me-md-auto text-center text-md-start">
+            <div class="copyright">
+                &copy; Copyright <strong><span>{{ company.name|upper }}</span></strong>. Todos los derechos reservados
+            </div>
+            <div class="credits">
+                Desarrollado por <a href="http://www.kayrosama.io" target="_blank">Kayro Sama, Inc.</a>
+            </div>
+        </div>
+        <div class="social-links text-center text-md-end pt-3 pt-md-0">
+            {% for social_network in social_networks %}
+                <a href="{{ social_network.url }}" target="_blank" class="{{ social_network.code }}"><i class="{{ social_network.icon }}"></i></a>
+            {% endfor %}
+        </div>
+    </div>
+</footer><!-- End Footer -->

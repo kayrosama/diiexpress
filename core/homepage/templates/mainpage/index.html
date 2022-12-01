@@ -1,0 +1,318 @@
+{% extends 'mainpage/base.html' %}
+{% load static %}
+{% block body %}
+    <!-- ======= Hero Section ======= -->
+    <section id="hero" class="d-flex align-items-center">
+
+        <div class="container" data-aos="zoom-out" data-aos-delay="100">
+            <div class="row">
+                <div class="col-xl-6">
+                    <h1>{{ company.name|upper }}</h1>
+                    <h2>Nos especializamos en el envío de documentos y paquetería nacional e internacional, ofreciendo un modelo logístico innovador, en donde la tecnología le permitirá conocer en todo momento el estado de su envío, garantizando una entrega exitosa.</h2>
+                    <a href="#about" class="btn-get-started scrollto">Empezar</a>
+                </div>
+            </div>
+        </div>
+
+    </section><!-- End Hero -->
+
+    <main id="main">
+
+        <!-- ======= About Section ======= -->
+        <section id="about" class="about">
+            <div class="container" data-aos="fade-up">
+
+                <div class="row no-gutters">
+                    <div class="content col-xl-5 d-flex align-items-stretch">
+                        <div class="content">
+                            <h3>{{ company.name|upper }}</h3>
+                            <img alt="{{ company.name }}" src="{{ company.get_image }}" class="img-fluid d-block mx-auto mb-3">
+                            <p>{{ company.description }}</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-7 d-flex align-items-stretch">
+                        <div class="icon-boxes d-flex flex-column justify-content-center">
+                            <div class="row">
+                                <div class="col-md-12 icon-box" data-aos="fade-up" data-aos-delay="100">
+                                    <i class="bx bx-receipt"></i>
+                                    <h4>Misión</h4>
+                                    <p>{{ company.mission }}</p>
+                                </div>
+                                <div class="col-md-12 icon-box" data-aos="fade-up" data-aos-delay="200">
+                                    <i class="bx bx-cube-alt"></i>
+                                    <h4>Visión</h4>
+                                    <p>{{ company.vision }}</p>
+                                </div>
+                                <div class="col-md-12 icon-box" data-aos="fade-up" data-aos-delay="300">
+                                    <i class="bx bx-images"></i>
+                                    <h4>Quienes somos</h4>
+                                    <p>{{ company.about_us }}</p>
+                                </div>
+                            </div>
+                        </div><!-- End .content-->
+                    </div>
+                </div>
+
+            </div>
+        </section><!-- End About Section -->
+
+        <!-- ======= Services Section ======= -->
+        <section id="services" class="services section-bg ">
+            <div class="container" data-aos="fade-up">
+
+                <div class="section-title">
+                    <h2>Servicios</h2>
+                    <p>Aprovecha nuestros servicios y soluciones diseñados para satisfacer todas tus necesidades de envío</p>
+                </div>
+
+                <div class="row">
+                    {% for service in services %}
+                        <div class="col-md-6{% if not forloop.first %} amt-4 mt-md-0{% endif %} ">
+                            <div class="icon-box" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
+                                <div class="row">
+                                    <div class="col-md-3 text-center">
+                                        <img src="{{ service.get_image }}" alt="{{ service.id }}" class="img-fluid d-block mx-auto">
+                                    </div>
+                                    <div class="col-md-9">
+                                        <h4>{{ service.name }}</h4>
+                                        <p>{{ service.description }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </section><!-- End Services Section -->
+
+        <!-- ======= Portfolio Section ======= -->
+        <section id="portfolio" class="portfolio">
+            <div class="container" data-aos="fade-up">
+
+                <div class="section-title">
+                    <h2>Productos</h2>
+                    <p>Contamos con un portafolio completo y especializado de productos de limpieza para darte el mejor servicio para tu empresa o casa.</p>
+                </div>
+
+                <div class="row" data-aos="fade-up" data-aos-delay="100">
+                    <div class="col-lg-12 d-flex justify-content-center">
+                        <ul id="portfolio-flters">
+                            <li data-filter="*" data-id="0" class="btn-category filter-active">Todos</li>
+                            {% for category in categories %}
+                                <li data-filter=".filter-{{ category.id }}" data-id="{{ category.id }}" class="btn-category">{{ category.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row" data-aos="fade-up" data-aos-delay="200">
+                    {% for category in categories %}
+                        {% for product in category.product_set.all %}
+                            <div class="col-lg-3 col-md-6 filter-product filter-{{ category.id }} mb-3">
+                                <div class="card">
+                                    <img src="{{ product.get_image }}" class="card-img-top mx-auto d-block" alt="">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ product.name }}</h5>
+                                        <p class="card-text fst-italic">{{ product.description }}</p>
+                                        <hr>
+                                        <h1 class="text-center"><span class="badge rounded-pill bg-secondary">${{ product.pvp|floatformat:2 }}</span></h1>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </section><!-- End Portfolio Section -->
+
+        <!-- ======= Testimonials Section ======= -->
+        <section id="testimonials" class="testimonials section-bg">
+            <div class="container" data-aos="fade-up">
+                <div class="section-title">
+                    <h2>Testimonios</h2>
+                    <p>
+                        Nos fascina ese sentimiento de satisfacción al saber que sus entregas fueron SEGURAS y SIN PROBLEMAS
+                    </p>
+                </div>
+
+                <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
+                    <div class="swiper-wrapper">
+                        {% for testimonial in testimonials %}
+                            <div class="swiper-slide">
+                                <div class="testimonial-wrap">
+                                    <div class="testimonial-item">
+                                        <img src="{{ testimonial.get_image }}" class="testimonial-img" alt="">
+                                        <h3>{{ testimonial.names }}</h3>
+                                        <h4>{{ testimonial.profession }}</h4>
+                                        <p>
+                                            <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                                            {{ testimonial.comment }}
+                                            <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+
+            </div>
+        </section><!-- End Testimonials Section -->
+
+        <!-- ======= Frequently Asked Questions Section ======= -->
+        <section id="faq" class="faq">
+            <div class="container" data-aos="fade-up">
+
+                <div class="section-title">
+                    <h2>Preguntas frecuentes</h2>
+                </div>
+
+                <ul class="faq-list accordion" data-aos="fade-up">
+                    {% for frequent_question in frequent_questions %}
+                        <li>
+                            <a data-bs-toggle="collapse" class="collapsed" data-bs-target="#faq{{ forloop.counter }}">{{ frequent_question.question }} <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-x icon-close"></i></a>
+                            <div id="faq{{ forloop.counter }}" class="collapse" data-bs-parent=".faq-list">
+                                <p>
+                                    {{ frequent_question.answer }}
+                                </p>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+            </div>
+        </section><!-- End Frequently Asked Questions Section -->
+
+        <!-- ======= Team Section ======= -->
+        <section id="team" class="team section-bg">
+            <div class="container" data-aos="fade-up">
+
+                <div class="section-title">
+                    <h2>Equipo de Trabajo</h2>
+                    <p>Mediante el trabajo en equipo, buscamos el bienestar de nuestra industria, nuestras empresas y las personas que trabajan para nosotros.</p>
+                </div>
+
+                <div class="row">
+                    {% for i in team %}
+                        <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+                            <div class="member" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
+                                <div class="member-img">
+                                    <img src="{{ i.get_image }}" class="img-fluid" alt="">
+                                    <div class="social">
+                                        {% for d in i.teamdetail_set.all %}
+                                            <a href="{{ d.url }}" target="_blank"><i class="{{ d.icon }}"></i></a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="member-info">
+                                    <h4>{{ i.names }}</h4>
+                                    <span>{{ i.profession }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </section><!-- End Team Section -->
+
+        <!-- ======= Contact Section ======= -->
+        <section id="contact" class="contact">
+            <div class="container" data-aos="fade-up">
+
+                <div class="section-title">
+                    <h2>Contactos</h2>
+                    <p>Estamos para ayudarte, si deseas realizar una consulta sobre cualquier aspecto del servicio te rogamos que nos contactes.</p>
+                </div>
+
+                <div class="row" data-aos="fade-up" data-aos-delay="100">
+
+                    <div class="col-lg-6">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="info-box">
+                                    <i class="bx bx-map"></i>
+                                    <h3>Dirección</h3>
+                                    <p>{{ company.address }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box mt-4">
+                                    <i class="bx bx-envelope"></i>
+                                    <h3>Email</h3>
+                                    <p>{{ company.email }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-box mt-4">
+                                    <i class="bx bx-phone-call"></i>
+                                    <h3>Teléfono</h3>
+                                    <p>{{ company.mobile }} - {{ company.phone }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-lg-6">
+                        <form action="." method="post" id="frmComments">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="fw-bold mb-0"><i class="fa-solid fa-comments"></i> Escríbenos</h5>
+                                </div>
+                                <div class="card-body p-3">
+                                    <div class="container-fluid">
+                                        {% for field in form.visible_fields %}
+                                            <div class="mb-3">
+                                                <label class="fw-bold form-label">{{ field.label }}:</label>
+                                                {{ field }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-primary btn-lg">
+                                            <i class="fa-solid fa-paper-plane"></i> Enviar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </section><!-- End Contact Section -->
+
+    </main><!-- End #main -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+{% endblock %}
+
+{% block js %}
+    <!-- Vendor JS Files -->
+    <script src="{% static 'mainpage/vendor/purecounter/purecounter.js' %}"></script>
+    <script src="{% static 'mainpage/vendor/aos/aos.js' %}"></script>
+    <script src="{% static 'lib/bootstrap-4.6.0/js/jquery.min.js' %}"></script>
+    <script src="{% static 'mainpage/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'mainpage/vendor/glightbox/js/glightbox.min.js' %}"></script>
+    <script src="{% static 'mainpage/vendor/swiper/swiper-bundle.min.js' %}"></script>
+    <!-- Template Main JS File -->
+    <script src="{% static 'mainpage/js/main.js' %}"></script>
+    <script src="{% static 'lib/jquery-confirm-3.3.4/js/jquery-confirm.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/jquery-confirm-3.3.4/css/jquery-confirm.min.css' %}"/>
+    <script src="{% static 'lib/sweetalert2-11.0.16/sweetalert2.all.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/sweetalert2-11.0.16/sweetalert2.min.css' %}"/>
+    <script src="{% static 'lib/jquery-loading-overlay-2.1.7/loadingoverlay.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/formvalidation-1.9.0/css/formValidation.min.css' %}">
+    <script src="{% static 'lib/formvalidation-1.9.0/js/es6-shim.min.js' %}"></script>
+    <script src="{% static 'lib/formvalidation-1.9.0/js/FormValidation.min.js' %}"></script>
+    <script src="{% static 'lib/formvalidation-1.9.0/js/plugins/Bootstrap5.min.js' %}"></script>
+    <script src="{% static 'lib/formvalidation-1.9.0/js/locales/es_ES.min.js' %}"></script>
+    <script src="{% static 'js/functions.js' %}"></script>
+    <script src="{% static 'mainpage/js/comments.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        @page {
+            width: 58mm;
+            height: {{ height }}px;
+            margin: 0;
+        }
+
+        body {
+            font-family: "Roboto", "Lucida Grande", Verdana, Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+            font-size: 8px;
+            color: black !important;
+        }
+
+        p {
+            font-size: 5px;
+        }
+
+        .content {
+            width: 58mm;
+            height: {{ height }}px;
+            padding: 10px;
+        }
+
+        .client {
+            font-size: 5px;
+            margin-top: 0;
+            padding-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .name-company {
+            margin-top: 10px;
+            font-size: 9px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 0;
+            text-align: center;
+        }
+
+        .desc-company {
+            font-size: 5px;
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+
+        .border-dotted {
+            border-top-style: dotted;
+            border-bottom-style: dotted;
+        }
+
+        .ruc {
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .table {
+            font-size: 5px;
+            color: black;
+        }
+
+        .table td, .table th {
+            padding: 0;
+            color: black;
+        }
+
+        .img-logo {
+            margin-top: 5px;
+            width: 20px;
+            height: 20px;
+            margin-bottom: 5px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="content">
+    <img alt="" src="{{ company.get_image }}" class="img-fluid d-block mx-auto img-logo">
+    <h1 class="name-company">{{ company.name }}</h1>
+    <p class="text-center desc-company">
+        {{ company.address }}<br>
+        Celular: +593 {{ company.mobile }}<br>
+        Teléfono: {{ company.phone }}<br>
+        Web: {{ company.website }}<br>
+    </p>
+    <p class="ruc border-dotted">
+        RUC N°: {{ company.ruc }}
+    </p>
+    <p class="client">
+        <b>Número de comprobante:</b> {{ sale.number }}<br>
+        <b>Cliente:</b> {{ sale.client.names }}<br>
+        <b>Número de cédula:</b> {{ sale.client.dni }}<br>
+        <b>Fecha de registro:</b> {{ sale.date_joined|date:'c' }}<br>
+        <b>Tipo:</b> {{ sale.get_type_display|upper }}<br>
+        {% if sale.type == 'housekeeping' %}
+            <b>Empleado: </b> {{ sale.employee.names }}<br>
+            <b>Fecha de atención: </b> {{ sale.get_date_attention_format }}
+        {% endif %}
+    </p>
+    {% if sale.is_sale %}
+        <p class="font-weight-bold pb-0 mb-0" style="border-bottom: 1px double black;">Productos:</p>
+        <table class="table table-borderless table-sm" style="margin-bottom: 0">
+            <thead>
+            <tr style="border-bottom: 1px double black;">
+                <th style="width: 15%;">Cantidad</th>
+                <th style="width: 50%;">Producto</th>
+                <th style="width: 20%;">P./Unitario</th>
+                <th style="width: 15%;" class="text-right">Subtotal</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for detail in sale.get_products %}
+                <tr>
+                    <td>{{ detail.cant }}</td>
+                    <td>{{ detail.product.name }}</td>
+                    <td>{{ detail.price|floatformat:2 }}</td>
+                    <td class="text-right">{{ detail.subtotal|floatformat:2 }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="4" class="text-right font-weight-bold" style="border-top: 1px double black;">Subtotal: {{ sale.get_subtotal_products|floatformat:2 }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="font-weight-bold pb-0 mb-0" style="border-bottom: 1px double black;">Servicios:</p>
+        <table class="table table-borderless table-sm" style="margin-bottom: 0">
+            <thead>
+            <tr style="border-bottom: 1px double black;">
+                <th style="width: 15%;">Cantidad</th>
+                <th style="width: 15%;">Tipo</th>
+                <th style="width: 35%;">Servicio</th>
+                <th style="width: 20%;">P./Unitario</th>
+                <th style="width: 15%;" class="text-right">Subtotal</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for detail in sale.get_services %}
+                <tr>
+                    <td>{{ detail.cant }}</td>
+                    <td>{{ detail.product.get_type_display }}</td>
+                    <td>{{ detail.product.name }}</td>
+                    <td>{{ detail.price }}</td>
+                    <td class="text-right">{{ detail.subtotal }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="5" class="text-right font-weight-bold" style="border-top: 1px double black;">Subtotal: {{ sale.get_subtotal_services|floatformat:2 }}</td>
+            </tr>
+            </tbody>
+        </table>
+    {% else %}
+        <p class="font-weight-bold pb-0 mb-0" style="border-bottom: 1px double black;">Paquetes:</p>
+        <table class="table table-borderless table-sm" style="margin-bottom: 0">
+            <thead>
+            <tr style="border-bottom: 1px double black;">
+                <th style="width: 15%;">Descripción</th>
+                <th style="width: 50%;">Tarifa</th>
+                <th style="width: 20%;">Peso</th>
+                <th style="width: 15%;" class="text-right">Subtotal</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for detail in sale.salepackages_set.all %}
+                <tr>
+                    <td>{{ detail.description }}</td>
+                    <td>{{ detail.tariff.get_short_name }}</td>
+                    <td>{{ detail.peso|floatformat:2 }}</td>
+                    <td class="text-right">{{ detail.subtotal }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="4" class="text-right font-weight-bold" style="border-top: 1px double black;">Subtotal: {{ sale.get_subtotal_packages|floatformat:2 }}</td>
+            </tr>
+            </tbody>
+        </table>
+    {% endif %}
+    <br>
+    <table class="table table-borderless table-sm" style="margin-top: 0">
+        <thead>
+        <tr>
+            <th style="width: 50%;"></th>
+            <th style="width: 50%;"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="float-left"><b>Subtotal</b></td>
+            <td class="text-right">{{ sale.subtotal }}</td>
+        </tr>
+        <tr>
+            <td class="float-left"><b>Iva {{ sale.iva }}%</b></td>
+            <td class="text-right">{{ sale.total_iva }}</td>
+        </tr>
+        <tr>
+            <td class="float-left"><b>Total a pagar</b></td>
+            <td class="text-right">{{ sale.total }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <p class="text-center border-dotted p-1">
+        !Gracias por su preferencia!<br>
+        Que tenga un excelente día
+    </p>
+</div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+{% extends 'mainpage/base.html' %}
+{% load static %}
+{% block head %}
+    <script src="{% static 'lib/bootstrap-4.6.0/js/jquery.min.js' %}"></script>
+    <script src="{% static 'mainpage/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/fontawesome-6.1.1/css/all.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.25/css/dataTables.bootstrap5.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.25/plugins/responsive-2.2.9/css/responsive.bootstrap5.min.css' %}"/>
+    <script src="{% static 'lib/datatables-1.10.25/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.25/js/dataTables.bootstrap5.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.25/plugins/responsive-2.2.9/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.25/plugins/responsive-2.2.9/js/responsive.bootstrap5.min.js' %}"></script>
+    <script src="{% static 'lib/jquery-confirm-3.3.4/js/jquery-confirm.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/jquery-confirm-3.3.4/css/jquery-confirm.min.css' %}"/>
+    <script src="{% static 'lib/sweetalert2-11.0.16/sweetalert2.all.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/sweetalert2-11.0.16/sweetalert2.min.css' %}"/>
+    <script src="{% static 'lib/jquery-loading-overlay-2.1.7/loadingoverlay.min.js' %}"></script>
+    <script src="{% static 'js/functions.js' %}"></script>
+    <script src="{% static 'mainpage/js/track_order.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+    <section id="login">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card">
+                        <div class="card-header">
+                            <h1 class="card-title fw-bold">
+                                <i class="fa-solid fa-location-crosshairs"></i> Rastreo de envío de paquete
+                            </h1>
+                        </div>
+                        <div class="card-body p-4">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ next }}">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Buscador de paquete:</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control form-control-lg" maxlength="10" name="number" placeholder="Ingrese su número de guía">
+                                    <button class="btn btn-primary btnSearch" disabled type="button">
+                                       <i class="fa-solid fa-route"></i> Consultar
+                                    </button>
+                                </div>
+                            </div>
+                            <hr>
+                            <table style="width:100%;"
+                                   class="table table-striped" id="tblShippingRoute">
+                                <thead>
+                                <tr>
+                                    <th style="width: 25%;">Fecha de registro</th>
+                                    <th style="width: 15%;">Estado</th>
+                                    <th style="width: 60%;">Comentario</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="card-footer p-4 pb-1">
+                            <div class="alert alert-success fw-bold alert-dismissible fade show" role="alert">
+                                <strong> <i class="fa-solid fa-clipboard-check mr-3"></i></strong> Gracias por usar nuestro servicio, es un placer atenderte.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

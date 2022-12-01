@@ -1,0 +1,31 @@
+<!-- ======= Header ======= -->
+<header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center">
+        <h1 class="logo me-auto">
+            <img src="{{ company.get_image }}" alt=""> <a href="{% url 'index' %}">{{ company.name }}</a>
+        </h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href="index.html" class="logo me-auto"><img src="mainpage/img/logo.png" alt=""></a>-->
+
+        <nav id="navbar" class="navbar order-last order-lg-0">
+            <ul>
+                <li><a class="nav-link scrollto active" href="{% if not initial %}/{% endif %}#about">Acerca de nosotros</a></li>
+                <li><a class="nav-link scrollto" href="{% if not initial %}/{% endif %}#services">Servicios</a></li>
+                <li><a class="nav-link scrollto" href="{% if not initial %}/{% endif %}#portfolio">Productos</a></li>
+                <li><a class="nav-link scrollto" href="{% if not initial %}/{% endif %}#team">Equipo de Trabajo</a></li>
+                <li><a class="nav-link scrollto" href="{% if not initial %}/{% endif %}#contact">Contactos</a></li>
+                <li><a class="nav-link scrollto" href="{% url 'track_order' %}">Rastrea tu Envío</a></li>
+                <li>
+                    {% if request.user.is_superuser %}
+                        <a class="nav-link scrollto" href="{% url 'dashboard' %}">Bienvenido {{ request.user.get_short_name }}</a>
+                    {% else %}
+                        <a class="nav-link scrollto" href="{% url 'login' %}">
+                            Iniciar Sesión
+                        </a>
+                    {% endif %}
+                </li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav><!-- .navbar -->
+    </div>
+</header><!-- End Header -->
