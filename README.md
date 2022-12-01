@@ -43,7 +43,7 @@ cd venv\Scripts\activate.bat
 Para Linux:
 
 ```bash
-source venv/bin/active
+source venv/bin/activate
 ```
 
 ##### 5) Instalar todas las librerias del proyecto que se encuentran en la carpeta deploy
